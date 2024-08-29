@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Routes } 
+  from "react-router-dom";
 import Todo from './pages/todo';
 import Home from './pages/home';
 import Sobre from './pages/sobre';
