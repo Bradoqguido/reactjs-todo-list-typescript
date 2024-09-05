@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import TodoList from '../../components/todolist'
 import CriarTodo from '../../components/criarTodo'
 import { TodoProps } from '../../@types/todo'
+import { ContextoTodo } from '../../context/contextTodo'
+import { ContextoTema } from '../../context/contextTema'
 
 enum TodoPages {
   'criarTodo' = 'criarTodo',
@@ -9,13 +11,9 @@ enum TodoPages {
 }
 
 const Todo = () => {
-    const [getTodos, setTodos] = useState<TodoProps[]>([
-      { id: 1, titulo: 'tarefa 1'},
-      { id: 2, titulo: 'tarefa 2'},
-      { id: 3, titulo: 'tarefa 3'},
-      { id: 4, titulo: 'tarefa 4'},
-      { id: 5, titulo: 'tarefa 5'}
-    ])
+    const tema = useContext(ContextoTema)
+    const todos = useContext(ContextoTodo)
+    const [getTodos, setTodos] = useState<TodoProps[]>(todos)
     
     const [getPaginaAtual, setPaginaAtual] = useState<TodoPages>(TodoPages.listarTodo);
 
@@ -55,6 +53,7 @@ const Todo = () => {
 
     return (
       <div style={{ textAlign: 'center' }}>
+        <h2>{tema}</h2>
         {renderizarBotoes()}
         {renderizarPagina()}
       </div>
