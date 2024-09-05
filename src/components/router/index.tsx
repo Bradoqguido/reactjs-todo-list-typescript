@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Todo from "../../pages/todo";
+import Home from "../../pages/home";
+import Sobre from "../../pages/sobre";
 
 enum RouterPages {
     'home' = 'home',
@@ -21,10 +23,10 @@ const Router = () => {
 
     const renderizarPagina = () => {
         switch (getPaginaAtual) {
-            case RouterPages.home: return <div><h1>Inicio</h1></div>
+            case RouterPages.home: return <Home />
             case RouterPages.todo: return <Todo />
-            case RouterPages.sobre: return <div><h1>Sobre</h1></div>
-            default: return <div><h1>Inicio</h1></div>
+            case RouterPages.sobre: return <Sobre />
+            default: return <Home />
         }
     }
 
