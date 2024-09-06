@@ -6,7 +6,8 @@ import Home from "./pages/home";
 import Sobre from "./pages/sobre";
 import { ContextoTema } from "./context/contextTema";
 import { ContextoTodo } from "./context/contextTodo";
-// npm i react-router-dom <- instala o pacote react-router-dom
+import { FirebaseContext } from './context/contextFirebase';
+import { db, auth } from './firebaseConfig'
 
 function App() {
   const renderizarBotoes = () => (
@@ -23,18 +24,20 @@ function App() {
 
   return (
     <ContextoTema.Provider value='dark'>
-      <Router>
-        {renderizarBotoes()}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/todo" element={
-            <ContextoTodo.Provider value={[]}>
-              <Todo />
-            </ContextoTodo.Provider>
-          } />
-          <Route path="/sobre" element={<Sobre />} />
-        </Routes>
-      </Router>
+      <FirebaseContext.Provider value={{ db, auth }}>
+        <Router>
+          {renderizarBotoes()}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/todo" element={
+              <ContextoTodo.Provider value={[]}>
+                <Todo />
+              </ContextoTodo.Provider>
+            } />
+            <Route path="/sobre" element={<Sobre />} />
+          </Routes>
+        </Router>
+      </FirebaseContext.Provider>
     </ContextoTema.Provider>
   );
 }
