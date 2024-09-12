@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
-import { TodoProps } from '../@types/todo'
+import React, {createContext } from "react";
+import { TodoService } from "../utils/TodoService";
 
-export const ContextoTodo = createContext<TodoProps[]>([])
+export const ContextTodo = createContext<{ todoService: TodoService } | undefined>(undefined)
