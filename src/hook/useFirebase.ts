@@ -7,4 +7,6 @@ export const useFirebase = () => {
     if (!contexto) {
         throw new Error('useFirebase só pode ser usado dentro do contexto FirebaseContext')
     }
+
+    return contexto.api
 }

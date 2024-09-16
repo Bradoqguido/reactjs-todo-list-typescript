@@ -9,8 +9,11 @@ import { ContextTodo } from "./context/contextTodo";
 import { FirebaseContext } from './context/contextFirebase';
 import { db, auth } from './firebaseConfig'
 import {TodoService} from "./utils/TodoService";
+import { Api } from "./utils/api/api";
 
 function App() {
+  const api: Api = new Api(db, auth)
+  
   const todoService = new TodoService()
   const renderizarBotoes = () => (
     <div className="App">
@@ -26,7 +29,7 @@ function App() {
 
   return (
     <ContextoTema.Provider value='dark'>
-      <FirebaseContext.Provider value={{ db, auth }}>
+      <FirebaseContext.Provider value={{ api }}>
         <Router>
           {renderizarBotoes()}
           <Routes>
