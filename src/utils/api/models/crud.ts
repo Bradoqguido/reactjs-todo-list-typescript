@@ -11,7 +11,7 @@ export default class Crud<T> {
         if (data === null || error !== null) throw error;
     }
 
-    async insert(objeto: T): Promise<void> {
+    async insert(objeto: any): Promise<void> {
         try {
             const docRef = doc(this.collectionRef, objeto.id)
             await setDoc(docRef, objeto, { merge: true })
@@ -43,7 +43,7 @@ export default class Crud<T> {
             const docRef = doc(this.collectionRef, id)
             const docSnapshot = await getDoc(docRef)
             if (docSnapshot.exists()) {
-                const item: T = docSnapshot.data() as T
+                const item: any = docSnapshot.data() as T
                 item.id = docSnapshot.id
                 return item
             }
@@ -53,7 +53,7 @@ export default class Crud<T> {
         }
     }
 
-    async update(objeto: T): Promise<void> {
+    async update(objeto: any): Promise<void> {
         try {
             const docRef = doc(this.collectionRef, objeto.id)
             await updateDoc(docRef, objeto)
