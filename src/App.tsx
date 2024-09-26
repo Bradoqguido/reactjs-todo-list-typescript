@@ -10,6 +10,7 @@ import { FirebaseContext } from './context/contextFirebase';
 import { db, auth } from './firebaseConfig'
 import {TodoService} from "./utils/TodoService";
 import { Api } from "./utils/api/api";
+import Login from "./pages/login";
 
 function App() {
   const api: Api = new Api(db, auth)
@@ -22,6 +23,7 @@ function App() {
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/todo">Todo</Link></li>
             <li><Link to="/sobre">Sobre</Link></li>
+            <li><Link to="/login">Login</Link></li>
           </ul>
         </nav>
       </div>
@@ -40,6 +42,7 @@ function App() {
               </ContextTodo.Provider>
             } />
             <Route path="/sobre" element={<Sobre />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </Router>
       </FirebaseContext.Provider>
