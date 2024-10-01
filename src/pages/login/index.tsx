@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useFirebase } from '../../hook/useFirebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, User } from 'firebase/auth'
+import { googleAuthProvider } from '../../firebaseConfig'
 
 const Login = () => {
     const api = useFirebase()
+    const [user, setUser] = useState<User | null>(api.auth.currentUser)
     const [estaFazendoLogin, setEstaFazendoLogin] = useState(true)
     const [email, setEmail] = useState<string>('')
     const [senha, setSenha] = useState<string>('')
@@ -15,7 +17,7 @@ const Login = () => {
 
         signInWithEmailAndPassword(api.auth, email, senha)
             .then((userCredencial) => {
-                console.log('Credenciais do usuário: ',{userCredencial})
+                setUser(userCredencial.user)
             })
             .catch((error) => console.error('erro ao fazer login. ', error))
     }
@@ -31,34 +33,54 @@ const Login = () => {
             .catch((error) => console.error('erro ao fazer login. ', error))
     }
 
+    const fazerLoginComGoogle = () => {
+        signInWithPopup(api.auth, googleAuthProvider)
+            .then((userCredential) => { 
+                setUser(userCredential.user)
+            })
+            .catch((error) => {
+                console.error('erro ao fazer login com google.',error)
+            })
+    }
+
     return (
         <div>
             {
-                estaFazendoLogin
+                user
                     ? <div>
-                        <h1>Login</h1>
-                        <input placeholder='email' type='email' onChange={(evento) => setEmail(evento.target.value)}/>
-                        <input placeholder='senha' type='password' onChange={(evento) => setSenha(evento.target.value)}/>
-                        <div>
-                            <button onClick={() => fazerLogin()}>Fazer Login</button>
-                        </div>
-                        <button onClick={() => setEstaFazendoLogin(false)}>Criar Conta</button>
+                        <p>Bem vindo, {user.displayName ? user.displayName : user.email}!</p>
+                        <p>UID: {user.uid}</p>
+                        <p>Email: {user.email}</p>
+                        <button onClick={() => {
+                            api.auth.signOut().then(() => setUser(api.auth.currentUser))
+                        }}>Logout</button>
                       </div>
-                    : <div>
-                        <h1>Criar Conta</h1>
-                        <div>
-                            <input placeholder='email' type='email' onChange={(evento) => setEmail(evento.target.value)} />
-                            <input placeholder='senha' type='password' onChange={(evento) => setSenha(evento.target.value)} />
-                            <input placeholder='confirmar senha' type='password' onChange={(evento) => setConfirmarSenha(evento.target.value)} />
-                        </div>
-                        <div>
-                            <button onClick={() => registrarUsuario()}>Criar Conta</button>
-                        </div>
-                        <button onClick={() => setEstaFazendoLogin(true)}>Fazer Login</button>
-                      </div>
+                    : estaFazendoLogin
+                                ? <div>
+                                    <h1>Login</h1>
+                                <input placeholder='email' type='email' onChange={(evento) => setEmail(evento.target.value)}/>
+                                <input placeholder='senha' type='password' onChange={(evento) => setSenha(evento.target.value)}/>
+                                    <div>
+                                        <button onClick={() => fazerLogin()}>Fazer Login</button>
+                                    </div>
+                                    <div>
+                                        <button onClick={() => fazerLoginComGoogle()}>Fazer Login com Google</button>
+                                    </div>
+                                <button onClick={() => setEstaFazendoLogin(false)}>Criar Conta</button>
+                                </div> 
+                                : <div>
+                                <h1>Criar Conta</h1>
+                                    <div>
+                                    <input placeholder='email' type='email' onChange={(evento) => setEmail(evento.target.value)} />
+                                    <input placeholder='senha' type='password' onChange={(evento) => setSenha(evento.target.value)} />
+                                    <input placeholder='confirmar senha' type='password' onChange={(evento) => setConfirmarSenha(evento.target.value)} />
+                                    </div>
+                                    <div>
+                                    <button onClick={() => registrarUsuario()}>Criar Conta</button>
+                                </div>
+                                <button onClick={() => setEstaFazendoLogin(true)}>Fazer Login</button>
+                                </div>
             }
-
-            <button onClick={() => api.auth.signOut()}>Logout</button>
         </div>
     )
 }
